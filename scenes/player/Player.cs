@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class Player : CharacterBody3D
 {
@@ -7,6 +6,9 @@ public partial class Player : CharacterBody3D
 	internal int Speed {get; set;} = 14;
 	[Export]
 	internal int FallAcceleration {get; set;} = 75;
+	[Export]
+	internal int JumpImpulse {get; set; } = 20;
+
 	private Vector3 _targetVelocity = Vector3.Zero;
 
 	public override void _PhysicsProcess(double delta)
@@ -25,6 +27,9 @@ public partial class Player : CharacterBody3D
 		if(!IsOnFloor()) _targetVelocity.Y -= FallAcceleration * (float)delta;
 
 		Velocity = _targetVelocity;
+
+		if (Input.IsActionJustPressed("jump"))
+			_targetVelocity.Y = JumpImpulse;
 
 		MoveAndSlide();
 
