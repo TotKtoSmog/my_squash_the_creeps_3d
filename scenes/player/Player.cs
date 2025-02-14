@@ -25,12 +25,11 @@ public partial class Player : CharacterBody3D
 		_targetVelocity =  new Vector3(direction.X, 0, direction.Z) * Speed;
 
 		if(!IsOnFloor()) _targetVelocity.Y -= FallAcceleration * (float)delta;
-
-		Velocity = _targetVelocity;
-
-		if (Input.IsActionJustPressed("jump"))
+		
+		if (IsOnFloor() && Input.IsActionJustPressed("jump"))
 			_targetVelocity.Y = JumpImpulse;
 
+		Velocity = _targetVelocity;
 		MoveAndSlide();
 
 	}
