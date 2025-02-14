@@ -8,6 +8,8 @@ public partial class Player : CharacterBody3D
 	internal int FallAcceleration {get; set;} = 75;
 	[Export]
 	internal int JumpImpulse {get; set; } = 20;
+	[Export]
+	internal int BounceImpulse { get; set; } = 16;
 
 	private Vector3 _targetVelocity = Vector3.Zero;
 
@@ -28,6 +30,22 @@ public partial class Player : CharacterBody3D
 		
 		if (IsOnFloor() && Input.IsActionJustPressed("jump"))
 			_targetVelocity.Y = JumpImpulse;
+
+		for (int index = 0; index < GetSlideCollisionCount(); index++)
+		{
+			
+			KinematicCollision3D collision = GetSlideCollision(index);
+			
+			if (collision.GetCollider() is Mob mob)
+			{
+				if (Vector3.Up.Dot(collision.GetNormal()) > 0.1f)
+				{
+					mob.Squash();
+					_targetVelocity.Y = BounceImpulse;
+					break;
+				}
+			}
+		}
 
 		Velocity = _targetVelocity;
 		MoveAndSlide();

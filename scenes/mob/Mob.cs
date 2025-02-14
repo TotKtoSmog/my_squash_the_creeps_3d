@@ -3,9 +3,18 @@ using Godot;
 public partial class Mob : CharacterBody3D
 {
 	[Export]
-	public int MinSpeed { get; set; } = 10;
+	internal int MinSpeed { get; set; } = 10;
 	[Export]
-	public int MaxSpeed { get; set; } = 18;
+	internal int MaxSpeed { get; set; } = 18;
+
+	[Signal]
+	public delegate void SquashedEventHandler();
+
+	public void Squash()
+	{
+		EmitSignal(SignalName.Squashed);
+		QueueFree();
+	}
 
 	public override void _PhysicsProcess(double delta) => MoveAndSlide();
 
